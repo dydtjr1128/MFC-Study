@@ -37,4 +37,7 @@ public:
 	CButton CrawllerButton;
 	afx_msg void OnBnClickedStartCrawllerButton();
 	CProgressCtrl MainProgressbar;
+	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	afx_msg void OnNMCustomdrawProgress1(NMHDR* pNMHDR, LRESULT* pResult);
 };

@@ -12,7 +12,15 @@
 #define new DEBUG_NEW
 #endif
 
-
+namespace {
+	inline CString GetCrallwerStartButtonText() {
+		CString btn;
+		if (btn.LoadString(IDS_START_CRAWLLER)) {
+			return btn;
+		}
+		return nullptr;
+	}
+}
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
 
 class CAboutDlg : public CDialogEx
@@ -20,12 +28,12 @@ class CAboutDlg : public CDialogEx
 public:
 	CAboutDlg();
 
-// 대화 상자 데이터입니다.
+	// 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_ABOUTBOX };
 #endif
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
 // 구현입니다.
@@ -35,7 +43,7 @@ protected:
 
 CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
 {
-	
+
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
@@ -69,6 +77,9 @@ BEGIN_MESSAGE_MAP(CMFCExampleDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_START_CRAWLLER_BUTTON, &CMFCExampleDlg::OnBnClickedStartCrawllerButton)
+	ON_WM_GETMINMAXINFO()
+	ON_WM_CTLCOLOR()
+	ON_NOTIFY(NM_CUSTOMDRAW, IDC_PROGRESS1, &CMFCExampleDlg::OnNMCustomdrawProgress1)
 END_MESSAGE_MAP()
 
 
@@ -77,22 +88,26 @@ END_MESSAGE_MAP()
 BOOL CMFCExampleDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-	SetWindowLong(this->m_hWnd,
+
+	//최소화 최대화 설정
+	/*SetWindowLong(this->m_hWnd,
 		GWL_STYLE,
-		GetWindowLong(this->m_hWnd, GWL_STYLE) | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
-	CString btn;
-	if (btn.LoadString(IDS_START_CRAWLLER)) {
-		CrawllerButton.SetWindowTextW(btn);
-		SetWindowTextW(btn);
-	}
+		GetWindowLong(this->m_hWnd, GWL_STYLE) | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);*/
+
+	CString btn = GetCrallwerStartButtonText();
+	CrawllerButton.SetWindowTextW(btn);
+	SetWindowTextW(btn);
 
 	progress = 0;
-	MainProgressbar.SetBarColor(CLR_DEFAULT);
+	/*MainProgressbar.SetBarColor(CLR_DEFAULT);
 	MainProgressbar.SetBkColor(RGB(220, 255, 220));
 	MainProgressbar.SetMarquee(TRUE, 1000);
-	MainProgressbar.SetState(PBST_NORMAL);
+	MainProgressbar.SetState(PBST_NORMAL);*/
 	MainProgressbar.SetRange(0, 100); //프로그레스바의 범위를 0에서 300으로 설정
-	MainProgressbar.SetPos(20);
+	MainProgressbar.SetPos(10);
+	
+//	CWnd* p_btn1 = GetDlgItem(IDC_PROGRESS1);
+
 
 	// 시스템 메뉴에 "정보..." 메뉴 항목을 추가합니다.
 
@@ -176,11 +191,21 @@ HCURSOR CMFCExampleDlg::OnQueryDragIcon()
 
 void CALLBACK MyTimerProc(HWND hWnd, UINT nMsg, UINT_PTR nIDEvent, DWORD dwTime)
 {
-	CMFCExampleDlg* pWnd =(CMFCExampleDlg*)CWnd::FromHandle(hWnd);
-	
-	pWnd->MainProgressbar.OffsetPos(1);
-	
-	if (pWnd->MainProgressbar.GetPos() >=100) {
+	CMFCExampleDlg* pWnd = (CMFCExampleDlg*)CWnd::FromHandle(hWnd);
+	CRect rect;
+	pWnd->GetDlgItem(IDC_PROGRESS_PERCENT)->GetWindowRect(&rect);
+	pWnd->ScreenToClient(&rect);
+	CString str;
+	pWnd->InvalidateRect(rect);
+	for (int i = 0; i < 30; i++) {	
+		
+		pWnd->MainProgressbar.OffsetPos(1);
+		Sleep(20);
+	}
+	str.Format(_T("%d %%"), pWnd->MainProgressbar.GetPos());
+	pWnd->GetDlgItem(IDC_PROGRESS_PERCENT)->SetWindowText(str);
+
+	if (pWnd->MainProgressbar.GetPos() >= 100) {
 		pWnd->KillTimer(pWnd->progress);
 		pWnd->MainProgressbar.SetPos(0);
 	}
@@ -188,9 +213,55 @@ void CALLBACK MyTimerProc(HWND hWnd, UINT nMsg, UINT_PTR nIDEvent, DWORD dwTime)
 
 void CMFCExampleDlg::OnBnClickedStartCrawllerButton()
 {
-	
-	//MainProgressbar.OffsetPos(1); //프로그레스바 1씩 감소
 
-	SetTimer(progress, 10, MyTimerProc);
+	//MainProgressbar.OffsetPos(1); //프로그레스바 1씩 감소	
+	SetTimer(progress, 1000, MyTimerProc);
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void CMFCExampleDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+	//min
+	lpMMI->ptMinTrackSize.x = 330;
+	lpMMI->ptMinTrackSize.y = 330;
+
+	//max
+
+	lpMMI->ptMaxTrackSize.x = 1600;
+	lpMMI->ptMaxTrackSize.y = 900;
+
+	CDialogEx::OnGetMinMaxInfo(lpMMI);
+}
+
+
+HBRUSH CMFCExampleDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
+	UINT nID = pWnd->GetDlgCtrlID();
+	
+
+	if (nCtlColor == CTLCOLOR_STATIC) {		
+		if (nID == IDC_PROGRESS_PERCENT) {			
+			pDC->SetBkMode(OPAQUE);  // 바꿔준다
+			//pDC->SetBkMode(TRANSPARENT); // 각 Static Text 배경 투명 변경 
+										 //pDC->SetTextColor(RGB(0, 0, 0));
+										 // 각 Static Text 글자 색 변경 
+										 //pDC->SetBkColor(RGB(0, 128, 0)); 
+										 // 각 Static Text 배경 색 변경 
+			return (HBRUSH)::GetStockObject(NULL_BRUSH); 
+		} 
+	}
+
+
+
+	return hbr;
+}
+
+
+void CMFCExampleDlg::OnNMCustomdrawProgress1(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	*pResult = 0;
 }

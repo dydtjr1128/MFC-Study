@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\crawler">
+      <UniqueIdentifier>{89a0b2e6-1471-4983-aa6b-58a23344f962}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\crawler\dto">
+      <UniqueIdentifier>{66ca0b3c-7a36-443b-aab3-cf520a6f110d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MFCExample.h">
@@ -33,6 +39,15 @@
     <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="CrawlerInfo.h">
+      <Filter>소스 파일\crawler\dto</Filter>
+    </ClInclude>
+    <ClInclude Include="BlogCrawlerImpl.h">
+      <Filter>소스 파일\crawler</Filter>
+    </ClInclude>
+    <ClInclude Include="Crawler.h">
+      <Filter>소스 파일\crawler</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MFCExample.cpp">
@@ -44,6 +59,12 @@
     <ClCompile Include="pch.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="CrawlerInfo.cpp">
+      <Filter>소스 파일\crawler\dto</Filter>
+    </ClCompile>
+    <ClCompile Include="BlogCrawlerImpl.cpp">
+      <Filter>소스 파일\crawler</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MFCExample.rc">
@@ -54,6 +75,7 @@
     <None Include="res\MFCExample.rc2">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\MFCExample.ico">
