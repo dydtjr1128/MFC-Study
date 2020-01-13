@@ -48,16 +48,13 @@ CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialogEx::DoDataExchange(pDX);
+	CDialogEx::DoDataExchange(pDX); 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
-
 // CMFCExampleDlg 대화 상자
-
-
 
 CMFCExampleDlg::CMFCExampleDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_MFCEXAMPLE_DIALOG, pParent)
@@ -79,11 +76,9 @@ BEGIN_MESSAGE_MAP(CMFCExampleDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_START_CRAWLLER_BUTTON, &CMFCExampleDlg::OnBnClickedStartCrawllerButton)
 	ON_WM_GETMINMAXINFO()
 	ON_WM_CTLCOLOR()
-	ON_NOTIFY(NM_CUSTOMDRAW, IDC_PROGRESS1, &CMFCExampleDlg::OnNMCustomdrawProgress1)
 END_MESSAGE_MAP()
 
-
-// CMFCExampleDlg 메시지 처리기
+ // CMFCExampleDlg 메시지 처리기
 
 BOOL CMFCExampleDlg::OnInitDialog()
 {
@@ -256,12 +251,4 @@ HBRUSH CMFCExampleDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 
 
 	return hbr;
-}
-
-
-void CMFCExampleDlg::OnNMCustomdrawProgress1(NMHDR* pNMHDR, LRESULT* pResult)
-{
-	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	*pResult = 0;
 }

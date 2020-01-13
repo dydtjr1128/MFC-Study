@@ -19,6 +19,15 @@
     <Filter Include="소스 파일\crawler\dto">
       <UniqueIdentifier>{66ca0b3c-7a36-443b-aab3-cf520a6f110d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\network">
+      <UniqueIdentifier>{cb0df64a-22b9-45f8-bb3a-1aaf0258a99c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\network\https">
+      <UniqueIdentifier>{5c29f7bb-79ad-499c-accd-02247f829862}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\ui">
+      <UniqueIdentifier>{249998ab-de58-4a4f-9469-887cd3ee6fe7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MFCExample.h">
@@ -48,6 +57,15 @@
     <ClInclude Include="Crawler.h">
       <Filter>소스 파일\crawler</Filter>
     </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>소스 파일\network</Filter>
+    </ClInclude>
+    <ClInclude Include="HttpsClient.h">
+      <Filter>소스 파일\network\https</Filter>
+    </ClInclude>
+    <ClInclude Include="RoundButton.h">
+      <Filter>소스 파일\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MFCExample.cpp">
@@ -64,6 +82,15 @@
     </ClCompile>
     <ClCompile Include="BlogCrawlerImpl.cpp">
       <Filter>소스 파일\crawler</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>소스 파일\network</Filter>
+    </ClCompile>
+    <ClCompile Include="HttpsClient.cpp">
+      <Filter>소스 파일\network\https</Filter>
+    </ClCompile>
+    <ClCompile Include="RoundButton.cpp">
+      <Filter>소스 파일\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

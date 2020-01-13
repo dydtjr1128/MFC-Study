@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "RoundButton.h"
 
 
 // CMFCExampleDlg 대화 상자
@@ -34,7 +35,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	int progress;
-	CButton CrawllerButton;
+	RoundButton CrawllerButton;
 	afx_msg void OnBnClickedStartCrawllerButton();
 	CProgressCtrl MainProgressbar;
 	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
