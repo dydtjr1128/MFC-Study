@@ -34,6 +34,7 @@ public:
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnMouseHover(UINT nFlags, CPoint point);
 };
 
 #endif // !UI_ROUND_BUTTON_H

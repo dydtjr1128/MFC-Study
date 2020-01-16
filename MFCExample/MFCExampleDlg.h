@@ -5,7 +5,6 @@
 #pragma once
 #include "RoundButton.h"
 
-
 // CMFCExampleDlg 대화 상자
 class CMFCExampleDlg : public CDialogEx
 {
@@ -38,6 +37,9 @@ public:
 	RoundButton CrawllerButton;
 	afx_msg void OnBnClickedStartCrawllerButton();
 	CProgressCtrl MainProgressbar;
+
+	void TrayStateSetup(int parm_command, const char* parm_tip_string);
+	afx_msg LRESULT OnTrayMessage(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	afx_msg void OnNMCustomdrawProgress1(NMHDR* pNMHDR, LRESULT* pResult);

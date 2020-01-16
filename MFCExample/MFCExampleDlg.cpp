@@ -70,6 +70,7 @@ void CMFCExampleDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CMFCExampleDlg, CDialogEx)
+	ON_MESSAGE(MY_TRAY_ICON, OnTrayMessage)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
@@ -92,12 +93,13 @@ BOOL CMFCExampleDlg::OnInitDialog()
 	CString btn = GetCrallwerStartButtonText();
 	CrawllerButton.SetWindowTextW(btn);
 	SetWindowTextW(btn);
+	SetBackgroundColor(RGB(255, 255, 255));
 
 	progress = 0;
-	/*MainProgressbar.SetBarColor(CLR_DEFAULT);
+	MainProgressbar.SetBarColor(CLR_DEFAULT);
 	MainProgressbar.SetBkColor(RGB(220, 255, 220));
 	MainProgressbar.SetMarquee(TRUE, 1000);
-	MainProgressbar.SetState(PBST_NORMAL);*/
+	MainProgressbar.SetState(PBST_NORMAL);
 	MainProgressbar.SetRange(0, 100); //프로그레스바의 범위를 0에서 300으로 설정
 	MainProgressbar.SetPos(10);
 	
@@ -132,6 +134,79 @@ BOOL CMFCExampleDlg::OnInitDialog()
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
+}
+
+void CMFCExampleDlg::TrayStateSetup(int parm_command, const char* parm_tip_string)
+{
+	//팝업이 보일 커서 위치 획득
+	CPoint cursorPoint;
+	::GetCursorPos(&cursorPoint);
+
+	CMenu trayMenu;
+	NOTIFYICONDATA taskbar_notify_data;
+	strcpy(taskbar_notify_data.szTip, parm_tip_string);
+
+	switch (parm_command) {
+		// 트레이에 등록
+	case NIM_ADD:
+		taskbar_notify_data.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
+		break;
+		// 트레이에서 해제
+	case NIM_DELETE:
+		taskbar_notify_data.uFlags = 0;
+		break;
+		// 이미 등록된 정보를 변경
+	case NIM_MODIFY:
+		taskbar_notify_data.uFlags = NIF_TIP | NIF_ICON;
+		break;
+	}
+
+	taskbar_notify_data.uID = (UINT)IDR_MAINFRAME;
+	taskbar_notify_data.cbSize = sizeof(NOTIFYICONDATA);
+	taskbar_notify_data.hWnd = this->m_hWnd;
+
+	// 트레이 아이콘에서 발생되는 상태에 대한 정보를 건네 받을 메시지 지정
+	taskbar_notify_data.uCallbackMessage = LM_TRAY_TIP_MESSAGE;
+
+	// IDI_ICON1 : 리소스탭의 Icon 항목에 트레이에 등록됐을 때 나타낼 아이콘의 아이디
+	taskbar_notify_data.hIcon = AfxGetApp()->LoadIcon(IDI_ICON1);
+
+	// 트레이에 등록할 정보(NOTIFYICONDATA)를 시스템에 전달하여 트레이에 등록한다.
+	Shell_NotifyIcon(parm_command, &taskbar_notify_data);
+
+	//커서 위치에 팝업 표시
+	//좌클릭 우클릭만 허용
+	trayMenu.TrackPopupMenu(TPM_LEFTBUTTON | TPM_RIGHTBUTTON, cursorPoint.x, cursorPoint.y, AfxGetMainWnd());
+}
+
+// 트레이에 존재하는 아이콘의 정보가 변경될 때 전달되는 메시지를 위한 핸들러
+// 본 메시지는 프로그래머가 트레이에 등록하기 전에 NOTIFYICONDATA 구조체에
+// 저장했던 uCallbackMessage 항목의 메시지를 통해 전달된다.
+LRESULT CMFCExampleDlg::OnTrayMessage(WPARAM wParam, LPARAM lParam)
+{
+	if (UINT(wParam) == IDR_MAINFRAME) {
+		// 트레이 아이콘 위에서 마우스 왼쪽버튼이 클릭되었다면 프로그램을
+		// 최상위로 올려주는 기능을 구현
+		switch(lParam){
+		case WM_LBUTTONDOWN:
+		{
+			TrayStateSetup()
+		}
+			break;
+		case WM_RBUTTONDOWN:
+		{
+
+		}
+			break;
+		}
+		if (lParam == WM_LBUTTONDOWN) {
+			ShowWindow(SW_SHOWNORMAL);
+			BringWindowToTop();
+			SetForegroundWindow();
+		}
+	}
+
+	return 0;
 }
 
 void CMFCExampleDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -197,6 +272,28 @@ void CALLBACK MyTimerProc(HWND hWnd, UINT nMsg, UINT_PTR nIDEvent, DWORD dwTime)
 		pWnd->MainProgressbar.OffsetPos(1);
 		Sleep(20);
 	}
+	
+	pWnd->ShowWindow(SW_SHOW);
+	pWnd->SetForegroundWindow();
+	pWnd->SetFocus();
+
+	HWND h_active_wnd = ::GetForegroundWindow();
+	CWnd* pWnd2 = CWnd::FromHandle(h_active_wnd);
+	pWnd2->ShowWindow(SW_SHOWMINIMIZED);
+	Sleep(500);
+	pWnd2->ShowWindow(SW_SHOWMAXIMIZED);
+	//HWND h_active_wnd = ::GetForegroundWindow();
+	//if (h_active_wnd != NULL) {
+	//	DWORD thread_id = GetWindowThreadProcessId(h_active_wnd, NULL);
+	//	DWORD current_thread_id = GetCurrentThreadId();
+	//	if (current_thread_id != thread_id) {
+	//		if (AttachThreadInput(current_thread_id, thread_id, TRUE)) {
+	//			pWnd->BringWindowToTop();
+	//			AttachThreadInput(current_thread_id, thread_id, FALSE);
+	//		}
+	//	}
+	//}
+	
 	str.Format(_T("%d %%"), pWnd->MainProgressbar.GetPos());
 	pWnd->GetDlgItem(IDC_PROGRESS_PERCENT)->SetWindowText(str);
 

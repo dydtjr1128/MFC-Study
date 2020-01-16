@@ -2,11 +2,11 @@
 #include "RoundButton.h"
 
 RoundButton::RoundButton() :
-	radius_(15)
+	radius_(5)
 {	
-	SetBackgroundColor(255, 64, 64, 64);
+	SetBackgroundColor(255, 255, 255, 255);
 	SetBorderColor(255, 128, 128, 128);
-	SetTextColor(255, 20, 20, 20);
+	SetTextColor(255, 0, 0, 0);
 	SetFontSize(15);
 	SetText(_T("Button"));
 }
@@ -49,14 +49,14 @@ void RoundButton::DrawBackground(Gdiplus::Graphics& pG)
 	CRect rect;
 	GetClientRect(&rect);
 
-	//Gdiplus::SolidBrush brush(backgroundColor_);
-	Gdiplus::LinearGradientBrush brush(
-		Gdiplus::Rect(rect.left, rect.top, rect.right, rect.bottom),
-		Gdiplus::Color(128,221,236,255),
-		Gdiplus::Color(255, 86, 125, 204),
-		45.0f,
-		FALSE
-	);
+	Gdiplus::SolidBrush brush(backgroundColor_);
+	//Gdiplus::LinearGradientBrush brush(
+	//	Gdiplus::Rect(rect.left, rect.top, rect.right, rect.bottom),
+	//	Gdiplus::Color(128,221,236,255),
+	//	Gdiplus::Color(255, 86, 125, 204),
+	//	45.0f,
+	//	FALSE
+	//);
 	FillRoundRectangle(pG, rect, brush, radius_);
 
 	//pG.FillRectangle(&brush, rect.left, rect.top, rect.right, rect.bottom);
@@ -91,6 +91,8 @@ void RoundButton::DrawPressedBackground(Gdiplus::Graphics& pG)
 		45.0f,
 		FALSE
 	);
+	//Gdiplus::SolidBrush brush(backgroundColor_);
+
 	pG.FillRectangle(&brush, rect.left, rect.top, rect.right, rect.bottom);
 }
 
@@ -98,7 +100,9 @@ void RoundButton::DrawBorder(Gdiplus::Graphics& pG)
 {
 	CRect rect;
 	GetClientRect(&rect);
-	Gdiplus::Pen pen(borderColor_, 3);
+	rect.InflateRect(-1, -1);	
+	//rect.MoveToXY({ 3,3 });
+	Gdiplus::Pen pen(borderColor_, 1);
 	DrawRoundRectangle(pG, rect, pen, radius_);
 	//pG.DrawRectangle(&pen, rect.left, rect.top, rect.Width(), rect.Height());
 }
@@ -142,7 +146,7 @@ BEGIN_MESSAGE_MAP(RoundButton, CButton)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONDBLCLK()
 	ON_WM_ERASEBKGND()
-	ON_WM_CREATE()
+	ON_WM_MOUSEHOVER()
 END_MESSAGE_MAP()
 
 
@@ -159,11 +163,9 @@ void RoundButton::OnPaint()
 
 	//Gdiplus::Graphics memG(&bmp);
 	mainG.SetSmoothingMode(Gdiplus::SmoothingModeHighQuality);
-
-	mainG.Clear(Gdiplus::Color(255, 255, 255, 255));
-	
+		
 	DrawBackground(mainG);
-	//DrawBorder(mainG);
+	DrawBorder(mainG);
 	DrawText(mainG);
 	//mainG.DrawImage(&bmp, 0, 0);
 }
@@ -173,7 +175,7 @@ void RoundButton::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	CPaintDC dc(this);
 	Gdiplus::Graphics mainG(dc.GetSafeHdc());
-	
+
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 
 	UINT id = this->GetDlgCtrlID();
@@ -182,7 +184,9 @@ void RoundButton::OnLButtonUp(UINT nFlags, CPoint point)
 	::SendMessage(GetParent()->GetSafeHwnd(), WM_COMMAND,
 		wParam,
 		lParam);
-	DrawBackground(mainG);
+	//DrawBackground(mainG);
+	//Invalidate(TRUE);
+	//AfxMessageBox(_T("hello"));
 	//CButton::OnLButtonUp(nFlags, point);
 }
 
@@ -192,7 +196,7 @@ void RoundButton::OnLButtonDown(UINT nFlags, CPoint point)
 	CPaintDC dc(this);
 	Gdiplus::Graphics mainG(dc.GetSafeHdc());		
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	DrawPressedBackground(mainG);
+	//DrawPressedBackground(mainG);
 
 	UINT id = this->GetDlgCtrlID();
 	LPARAM lParam = (LPARAM)GetDlgItem(id);
@@ -200,6 +204,7 @@ void RoundButton::OnLButtonDown(UINT nFlags, CPoint point)
 	::SendMessage(GetParent()->GetSafeHwnd(), WM_COMMAND,
 		wParam,
 		lParam);
+	//Invalidate(TRUE);
 	//CButton::OnLButtonDown(nFlags, point);
 }
 
@@ -219,22 +224,10 @@ BOOL RoundButton::OnEraseBkgnd(CDC* pDC)
 }
 
 
-int RoundButton::OnCreate(LPCREATESTRUCT lpCreateStruct)
+
+void RoundButton::OnMouseHover(UINT nFlags, CPoint point)
 {
-	if (CButton::OnCreate(lpCreateStruct) == -1)
-		return -1;
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 
-	// TODO:  여기에 특수화된 작성 코드를 추가합니다.
-	CPaintDC dc(this);
-
-	CRect rect;
-	GetClientRect(&rect);
-
-	Gdiplus::Graphics mainG(dc.GetSafeHdc());
-
-	Gdiplus::Bitmap bmp(rect.Width(), rect.Height());
-
-	Gdiplus::Graphics memG(&bmp);
-
-	return 0;
+	CButton::OnMouseHover(nFlags, point);
 }
