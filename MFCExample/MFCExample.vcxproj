@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -240,6 +240,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="RoundButton.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TrayIconControl.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BlogCrawlerImpl.cpp" />
@@ -255,6 +256,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="RoundButton.cpp" />
+    <ClCompile Include="TrayIconControl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MFCExample.rc" />

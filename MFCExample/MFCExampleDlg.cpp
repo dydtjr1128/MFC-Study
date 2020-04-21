@@ -70,7 +70,7 @@ void CMFCExampleDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CMFCExampleDlg, CDialogEx)
-	ON_MESSAGE(MY_TRAY_ICON, OnTrayMessage)
+	//ON_MESSAGE(MY_TRAY_ICON, OnTrayMessage)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
@@ -139,44 +139,44 @@ BOOL CMFCExampleDlg::OnInitDialog()
 void CMFCExampleDlg::TrayStateSetup(int parm_command, const char* parm_tip_string)
 {
 	//팝업이 보일 커서 위치 획득
-	CPoint cursorPoint;
-	::GetCursorPos(&cursorPoint);
+	//CPoint cursorPoint;
+	//::GetCursorPos(&cursorPoint);
 
-	CMenu trayMenu;
-	NOTIFYICONDATA taskbar_notify_data;
-	strcpy(taskbar_notify_data.szTip, parm_tip_string);
+	//CMenu trayMenu;
+	//NOTIFYICONDATA taskbar_notify_data;
+	//strcpy(taskbar_notify_data.szTip, parm_tip_string);
 
-	switch (parm_command) {
-		// 트레이에 등록
-	case NIM_ADD:
-		taskbar_notify_data.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
-		break;
-		// 트레이에서 해제
-	case NIM_DELETE:
-		taskbar_notify_data.uFlags = 0;
-		break;
-		// 이미 등록된 정보를 변경
-	case NIM_MODIFY:
-		taskbar_notify_data.uFlags = NIF_TIP | NIF_ICON;
-		break;
-	}
+	//switch (parm_command) {
+	//	// 트레이에 등록
+	//case NIM_ADD:
+	//	taskbar_notify_data.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
+	//	break;
+	//	// 트레이에서 해제
+	//case NIM_DELETE:
+	//	taskbar_notify_data.uFlags = 0;
+	//	break;
+	//	// 이미 등록된 정보를 변경
+	//case NIM_MODIFY:
+	//	taskbar_notify_data.uFlags = NIF_TIP | NIF_ICON;
+	//	break;
+	//}
 
-	taskbar_notify_data.uID = (UINT)IDR_MAINFRAME;
-	taskbar_notify_data.cbSize = sizeof(NOTIFYICONDATA);
-	taskbar_notify_data.hWnd = this->m_hWnd;
+	//taskbar_notify_data.uID = (UINT)IDR_MAINFRAME;
+	//taskbar_notify_data.cbSize = sizeof(NOTIFYICONDATA);
+	//taskbar_notify_data.hWnd = this->m_hWnd;
 
-	// 트레이 아이콘에서 발생되는 상태에 대한 정보를 건네 받을 메시지 지정
-	taskbar_notify_data.uCallbackMessage = LM_TRAY_TIP_MESSAGE;
+	//// 트레이 아이콘에서 발생되는 상태에 대한 정보를 건네 받을 메시지 지정
+	//taskbar_notify_data.uCallbackMessage = LM_TRAY_TIP_MESSAGE;
 
-	// IDI_ICON1 : 리소스탭의 Icon 항목에 트레이에 등록됐을 때 나타낼 아이콘의 아이디
-	taskbar_notify_data.hIcon = AfxGetApp()->LoadIcon(IDI_ICON1);
+	//// IDI_ICON1 : 리소스탭의 Icon 항목에 트레이에 등록됐을 때 나타낼 아이콘의 아이디
+	//taskbar_notify_data.hIcon = AfxGetApp()->LoadIcon(IDI_ICON1);
 
-	// 트레이에 등록할 정보(NOTIFYICONDATA)를 시스템에 전달하여 트레이에 등록한다.
-	Shell_NotifyIcon(parm_command, &taskbar_notify_data);
+	//// 트레이에 등록할 정보(NOTIFYICONDATA)를 시스템에 전달하여 트레이에 등록한다.
+	//Shell_NotifyIcon(parm_command, &taskbar_notify_data);
 
-	//커서 위치에 팝업 표시
-	//좌클릭 우클릭만 허용
-	trayMenu.TrackPopupMenu(TPM_LEFTBUTTON | TPM_RIGHTBUTTON, cursorPoint.x, cursorPoint.y, AfxGetMainWnd());
+	////커서 위치에 팝업 표시
+	////좌클릭 우클릭만 허용
+	//trayMenu.TrackPopupMenu(TPM_LEFTBUTTON | TPM_RIGHTBUTTON, cursorPoint.x, cursorPoint.y, AfxGetMainWnd());
 }
 
 // 트레이에 존재하는 아이콘의 정보가 변경될 때 전달되는 메시지를 위한 핸들러
@@ -190,7 +190,7 @@ LRESULT CMFCExampleDlg::OnTrayMessage(WPARAM wParam, LPARAM lParam)
 		switch(lParam){
 		case WM_LBUTTONDOWN:
 		{
-			TrayStateSetup()
+			//TrayStateSetup()
 		}
 			break;
 		case WM_RBUTTONDOWN:
